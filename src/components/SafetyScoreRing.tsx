@@ -14,12 +14,18 @@ function getStatus(score: number): SafetyStatus {
 }
 
 const statusColors = {
-  safe: "hsl(145, 35%, 74%)",
-  caution: "hsl(40, 80%, 80%)",
-  conflict: "hsl(0, 55%, 77%)",
+  safe: "hsl(145, 30%, 62%)",
+  caution: "hsl(38, 65%, 68%)",
+  conflict: "hsl(0, 50%, 65%)",
 };
 
-export function SafetyScoreRing({ score, size = 140, strokeWidth = 10 }: SafetyScoreRingProps) {
+const statusGlow = {
+  safe: "hsl(145, 30%, 62%)",
+  caution: "hsl(38, 65%, 68%)",
+  conflict: "hsl(0, 50%, 65%)",
+};
+
+export function SafetyScoreRing({ score, size = 130, strokeWidth = 8 }: SafetyScoreRingProps) {
   const [animatedScore, setAnimatedScore] = useState(0);
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -27,7 +33,7 @@ export function SafetyScoreRing({ score, size = 140, strokeWidth = 10 }: SafetyS
   const status = getStatus(score);
 
   useEffect(() => {
-    const timer = setTimeout(() => setAnimatedScore(score), 100);
+    const timer = setTimeout(() => setAnimatedScore(score), 200);
     return () => clearTimeout(timer);
   }, [score]);
 
@@ -39,7 +45,7 @@ export function SafetyScoreRing({ score, size = 140, strokeWidth = 10 }: SafetyS
           fill="none"
           stroke="hsl(var(--border))"
           strokeWidth={strokeWidth}
-          className="opacity-30"
+          className="opacity-20"
         />
         <circle
           cx={size / 2} cy={size / 2} r={radius}
@@ -49,13 +55,13 @@ export function SafetyScoreRing({ score, size = 140, strokeWidth = 10 }: SafetyS
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          className="transition-all duration-1000 ease-out"
-          style={{ filter: `drop-shadow(0 0 8px ${statusColors[status]}40)` }}
+          className="transition-all duration-[1.5s] ease-out"
+          style={{ filter: `drop-shadow(0 0 12px ${statusGlow[status]}50)` }}
         />
       </svg>
       <div className="absolute flex flex-col items-center">
-        <span className="text-3xl font-bold font-display text-foreground">{Math.round(animatedScore)}</span>
-        <span className="text-xs text-muted-foreground font-medium uppercase tracking-wider">Safety</span>
+        <span className="text-3xl font-bold font-display text-foreground tracking-tight">{Math.round(animatedScore)}</span>
+        <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.15em]">Safety</span>
       </div>
     </div>
   );
