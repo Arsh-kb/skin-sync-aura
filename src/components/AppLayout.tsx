@@ -19,7 +19,7 @@ export default function AppLayout() {
       <Outlet />
       {/* Bottom Tab Bar */}
       <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md z-50">
-        <div className="glass-strong rounded-t-2xl px-2 py-2 flex justify-around items-center">
+        <div className="mx-3 mb-3 glass-strong rounded-2xl px-2 py-2 flex justify-around items-center shadow-2xl">
           {tabs.map((tab) => {
             const isActive = location.pathname === tab.path;
             return (
@@ -27,14 +27,17 @@ export default function AppLayout() {
                 key={tab.path}
                 onClick={() => navigate(tab.path)}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all",
+                  "flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-xl transition-all duration-300",
                   isActive
-                    ? "text-primary bg-primary/10"
+                    ? "text-primary bg-primary/8"
                     : "text-muted-foreground hover:text-foreground"
                 )}
               >
-                <tab.icon size={20} strokeWidth={isActive ? 2.5 : 1.8} />
-                <span className="text-[10px] font-medium">{tab.label}</span>
+                <tab.icon size={20} strokeWidth={isActive ? 2.2 : 1.6} />
+                <span className={cn(
+                  "text-[10px] font-medium tracking-wide",
+                  isActive && "font-semibold"
+                )}>{tab.label}</span>
               </button>
             );
           })}

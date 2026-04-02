@@ -9,18 +9,18 @@ interface SafetyBadgeProps {
 }
 
 const config = {
-  safe: { label: "Safe", icon: Shield, bg: "bg-safe/20", text: "text-safe-foreground", border: "border-safe/30", glow: "safety-glow-safe" },
-  caution: { label: "Caution", icon: AlertTriangle, bg: "bg-caution/20", text: "text-caution-foreground", border: "border-caution/30", glow: "safety-glow-caution" },
-  conflict: { label: "Conflict", icon: XCircle, bg: "bg-conflict/20", text: "text-conflict-foreground", border: "border-conflict/30", glow: "safety-glow-conflict" },
+  safe: { label: "Safe", icon: Shield, bg: "bg-safe/15", text: "text-safe-foreground", border: "border-safe/25", glow: "safety-glow-safe" },
+  caution: { label: "Caution", icon: AlertTriangle, bg: "bg-caution/15", text: "text-caution-foreground", border: "border-caution/25", glow: "safety-glow-caution" },
+  conflict: { label: "Conflict", icon: XCircle, bg: "bg-conflict/15", text: "text-conflict-foreground", border: "border-conflict/25", glow: "safety-glow-conflict" },
 };
 
 const sizes = {
-  sm: "px-2 py-0.5 text-xs gap-1",
-  md: "px-3 py-1 text-sm gap-1.5",
-  lg: "px-4 py-1.5 text-base gap-2",
+  sm: "px-2.5 py-0.5 text-[10px] gap-1",
+  md: "px-3 py-1 text-xs gap-1.5",
+  lg: "px-4 py-1.5 text-sm gap-2",
 };
 
-const iconSizes = { sm: 12, md: 14, lg: 16 };
+const iconSizes = { sm: 11, md: 13, lg: 15 };
 
 export function SafetyBadge({ status, size = "md", showLabel = true }: SafetyBadgeProps) {
   const c = config[status];
@@ -28,7 +28,7 @@ export function SafetyBadge({ status, size = "md", showLabel = true }: SafetyBad
 
   return (
     <span className={cn(
-      "inline-flex items-center rounded-full border font-medium",
+      "inline-flex items-center rounded-full border font-medium tracking-wide",
       c.bg, c.text, c.border, sizes[size],
       status === "safe" && "animate-breathe",
       status === "caution" && "animate-pulse-warning",
