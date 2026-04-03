@@ -1,262 +1,134 @@
-CosmetiQ — Premium Skincare Safety & Intelligence App
 
-Design System
 
-Palette:  
-Warm skin tones — cream (#FFF8F0), peach (#FDDCB5), pastel pink (#F9E4E4), soft rose (#E8B4B8)  
-Semantic colors:
+# CosmetiQ AI — Visual-First Expansion + Responsive Layout + New Modules
 
-- Safe (green): #A8D5BA
-- Caution (amber): #F5D6A0
-- Conflict (coral/red): #E8A0A0
+## What's Changing
 
-Style:
-
-- Glassmorphism cards with soft blur backgrounds
-- Rounded-2xl everywhere
-- Soft shadows, layered depth
-- Warm gradient overlays
-
-Typography:
-
-- Clean modern sans-serif
-- Light to medium weights
-- Generous spacing and breathing room
-
-Animations:
-
-- Subtle hover elevation
-- Smooth transitions
-- Micro-interactions for feedback
-- Animated safety indicators (glow/pulse)
+This plan merges the previously approved feature expansion (responsive layout, 4 new pages) with the new **Visual Dominance Priority** rules. Every screen will be redesigned away from dashboard patterns toward an editorial, image-heavy, luxury skincare aesthetic.
 
 ---
 
-CORE CONCEPT
+## Visual Dominance Rules (Applied Globally)
 
-This is NOT an ecommerce app.  
-This is a “Skincare Safety System” + “Molecular Intelligence Platform”.
+These override all layout decisions:
 
-The UI must balance:
-
-- Emotional beauty (aesthetic, calming)
-- Clinical intelligence (trust, safety, logic)
-
----
-
-IMAGE & VISUAL STORYTELLING
-
-Use high-quality visuals:
-
-- Glowing skin faces (diverse tones)
-- Minimal product photography (serums, creams)
-- Soft-focus skincare lifestyle images
-
-Usage:
-
-- Dashboard hero background (blur + gradient overlay)
-- Product cards (clean product visuals)
-- Recommendation sections (skin/lifestyle imagery)
-
-Important:
-
-- Always apply soft overlays for readability
-- Avoid clutter
-- Maintain premium, calming feel
+- **Hero-first**: Every page opens with a large image section (40-60vh), text overlaid on image with gradient
+- **No stat grids**: Replace uniform card rows with staggered, mixed-size layouts
+- **50%+ image weight**: Product cards are image-dominant with overlaid text
+- **Non-grid layouts**: Horizontal scroll carousels, staggered masonry, mixed card sizes
+- **Overlay text**: Names, brands, tags render ON images with blur/gradient backing
+- **Depth/layering**: Cards overlap slightly, floating elements, soft shadows
+- **Emotional over analytical**: Calm, touchable, premium — not data-heavy
 
 ---
 
-SCREENS & FEATURES
+## 1. Responsive AppLayout
 
-1. Dashboard / Home
+**Mobile (<768px)**: Bottom glassmorphic tab bar (current, extended with new tabs — scrollable)
 
-- Personalized greeting (time-based)
-- Hero section with soft gradient + skincare image (blurred)
+**Desktop (md+)**: Left sidebar (~240px) with:
+- Logo "CosmetiQ AI" at top
+- Nav items with icons: Home, Shelf, Routine, Compare, Conflicts, Shop, Advisory, Guardian, Progress
+- Active state: rose/taupe pill highlight
+- Cream/linen background, soft right border
 
-Skin Status Card:
-
-- Glassmorphic card
-- Shows: Safe / Caution / Conflict
-- Includes animated indicator
-
-Safety Score Meter:
-
-- Circular progress ring (0–100)
-- Smooth animated fill
-- Positioned prominently
-
-Quick Actions:
-
-- Add Product
-- Check Routine
-- Compare
-- Displayed as floating pill cards
-
-Recent insights / tips section
+Content area: Remove `max-w-md` constraint → `max-w-6xl` on desktop
 
 ---
 
-2. Digital Shelf
+## 2. Dashboard Redesign (Visual-First)
 
-- Grid of product cards:
-  - Product image
-  - Name
-  - Key ingredients preview
-  - Safety badge
-- Ingredient chips:
-  - Niacinamide, Retinol, etc.
-  - Categorized (Actives, Hydrators, Exfoliants)
-- Filters as soft pill buttons
-- Empty state:
-  - Illustration + CTA
-- Hover:
-  - Slight elevation + glow
+Replace current stat-card layout with editorial flow:
+
+- **Full-bleed hero** (50-60vh): Lifestyle skincare image, greeting overlaid ("Good evening, Sarah"), safety score ring floating in corner
+- **Horizontal scroll carousel**: "Your Routine" — large overlapping product cards with images, product name overlaid
+- **Staggered insight section**: One large "Skin Status" glass card (overlapping hero edge) + one smaller "Daily Tip" card beside it — NOT a uniform grid
+- **Conflict alert**: Floating banner with blur background, not a boxed card
+- **Quick actions**: Floating pill buttons overlaid near bottom of hero, not a grid section
 
 ---
 
-3. Routine Builder
+## 3. Digital Shelf Redesign
 
-- Vertical timeline layout with connecting line
-
-Steps:  
-Cleanser → Toner → Serum → Moisturizer → Sunscreen
-
-Each step:
-
-- Floating glass card
-- Icon + product
-
-Safety Visualization:
-
-- Animated connectors between steps
-  - Green = safe
-  - Yellow = caution
-  - Red = conflict
-- Conflict interaction:
-  - slight shake + red highlight
-- Safe interaction:
-  - soft glow transition
+- **Hero**: Large skincare lifestyle image (40vh) with "Your Collection" overlaid
+- **Product cards**: Image-dominant (70% image, 30% overlay info). Product name + brand + safety badge rendered ON the image with gradient overlay at bottom
+- **Layout**: Staggered 2-column masonry on mobile, 3-column mixed sizes on desktop (alternate large/small cards)
+- **Horizontal scroll section**: "Actives" / "Hydrators" / "Exfoliants" category carousels with circular product thumbnails
+- **Filter pills**: Floating over hero bottom edge
 
 ---
 
-4. Compare Products
+## 4. Routine Page Redesign → "Routine Sequencer"
 
-- Two product cards side-by-side
-- Compatibility result:
-  - Compatible / Risk / Conflict
-  - Color-coded + icon
-- Ingredient overlap highlighting
-- Clean minimal layout
-
----
-
-5. AI Assistant (“Skin Guardian”)
-
-- Chat UI with soft bubbles
-- Pinned “Skin Status Insight” card above chat
-- Suggestion pills:
-  - “Is retinol safe with AHA?”
-  - “Review my routine”
-
-AGENT BEHAVIOR:
-
-- Persistent floating assistant (orb/avatar)
-- Proactive suggestions:
-  - “Conflict detected in routine”
-  - “Skin barrier risk reduced”
-- Appears across app (not just chat)
-- System-style insights (like Apple Health)
-
-Goal:  
-Make AI feel like an active guardian, not a chatbot
+- **Hero**: Soft skincare image with "Routine Sequencer" overlaid, AM/PM toggle pills floating
+- **Timeline cards**: Each step is a wide card with product image taking 60% width, info overlaid
+- **Connectors**: Animated safety lines between cards (green/yellow/red glow)
+- **Timing annotations**: "Wait 1-2 min" badges floating between steps
+- **Auto-sort button** and timing guide card at bottom
 
 ---
 
-6. Add Product Modal
+## 5. New Page: Conflicts (`/conflicts`)
 
-- Clean dialog with soft borders
-
-Fields:
-
-- Product name
-- Brand
-- Ingredients textarea
-- Optional image upload
-- Strong gradient CTA button
-- Smooth animation
+- **Hero**: Skincare texture close-up image with "Ingredient Conflicts" overlaid
+- **Compatibility matrix**: Soft glassmorphic table with colored dots (green/yellow/red)
+- **Common conflicts section**: Staggered cards (not grid) showing conflict pairs with severity badges, explanation text, and fix suggestions
+- **Status summary**: Floating glass card overlapping hero edge
 
 ---
 
-NAVIGATION
+## 6. New Page: Shop (`/shop`)
 
-- Bottom tab bar (mobile-first feel) or soft sidebar
-
-Tabs:
-
-- Home
-- Shelf
-- Routine
-- Compare
-- AI Assistant
-- Soft icons
-- Active tab highlight
+- **Hero**: Product photography collage with "Smart Marketplace" overlaid
+- **Product cards**: Large image-first cards with brand, name, match score %, price overlaid on image
+- **Layout**: Horizontal scroll carousel for "Top Matches" + staggered grid below
+- **Concern filter pills**: Floating horizontally scrollable (Oily Skin, Acne, Anti-aging, etc.)
+- **"+ Add" and "Buy" buttons**: Overlaid on card bottom with blur backing
 
 ---
 
-SAFETY VISUALIZATION (CRITICAL DIFFERENTIATOR)
+## 7. New Page: Advisory (`/advisory`)
 
-- Animated glow system:
-  - Green = breathing glow
-  - Yellow = pulse
-  - Red = warning glow
-- Safety Score Meter (circular)
-- Dynamic connectors between products
-- Micro-interactions:
-  - Conflict → shake + red flash
-  - Safe → smooth glow
-
-Goal:  
-Make safety feel alive and instantly understandable
+- **Hero**: Fresh foods/ingredients lifestyle image with "Skin Nutrition" overlaid
+- **Two tabs**: "Nutrition Guide" / "Safe DIY Filter" as floating pills
+- **Nutrition cards**: Large image + concern title overlaid, recommended foods listed below
+- **Staggered layout**: Alternating large/small cards, not uniform grid
 
 ---
 
-MOLECULAR / INGREDIENT INTELLIGENCE (UNIQUE EDGE)
+## 8. New Page: Progress (`/progress`)
 
-- Ingredient chips/tags per product
-- Group ingredients:
-  - Actives
-  - Hydrators
-  - Exfoliants
-- “Molecular View” toggle:
-  - Shows ingredient breakdown
-  - Highlights conflicts visually
-- Subtle graph-like or node-based visual cues
-
-Goal:  
-Show this is a data-driven system, not just a beauty UI
+- **Hero**: Soft glowing skin close-up with "Your Journey" overlaid
+- **Photo journal**: 4 large overlapping card slots (Week 1-4) with camera icon placeholder
+- **Daily rating**: Floating glass card with star icons
+- **Streak grid**: GitHub-style dots in warm tones (champagne → deep clay)
+- **Effectiveness ring**: Floating over a blurred background section
 
 ---
 
-INTERACTIONS
+## 9. Data Additions (`mockData.ts`)
 
-- All cards elevate on hover
-- Smooth page transitions
-- Subtle motion everywhere
-- Glassmorphic layering with blur
-- No harsh jumps or rigid UI
+- AM/PM routine arrays (separate product sets)
+- Marketplace products (6-8 items with prices, match scores, concern tags)
+- Advisory content (skin concerns + food recommendations)
+- Progress mock data (streak array, effectiveness score)
 
 ---
 
-GOAL
+## Files Summary
 
-Create a UI that feels:  
-premium + calming + intelligent + slightly futuristic
+| File | Action |
+|------|--------|
+| `src/components/AppLayout.tsx` | Rewrite — responsive sidebar + bottom tabs |
+| `src/pages/Dashboard.tsx` | Rewrite — visual-first editorial layout |
+| `src/pages/Shelf.tsx` | Rewrite — masonry, image-dominant cards |
+| `src/pages/Routine.tsx` | Rewrite — sequencer with hero + AM/PM |
+| `src/pages/Conflicts.tsx` | Create |
+| `src/pages/Shop.tsx` | Create |
+| `src/pages/Advisory.tsx` | Create |
+| `src/pages/Progress.tsx` | Create |
+| `src/components/ProductCard.tsx` | Rewrite — image-first with overlay text |
+| `src/data/mockData.ts` | Extend with new data arrays |
+| `src/App.tsx` | Add 4 new routes |
+| `src/index.css` | Add masonry/stagger utilities |
 
-It should:
-
-- attract users visually
-- retain them emotionally
-- impress judges technically
-
-This is not just a skincare app.  
-This is a Molecular Routine Controller & Safety System.
