@@ -36,37 +36,38 @@ export default function Compare() {
   const ResultIcon = resultIcons[result];
 
   return (
-    <div className="min-h-screen pb-24">
-      {/* Hero image */}
-      <div className="relative h-32 overflow-hidden">
+    <div className="min-h-screen pb-24 md:pb-8">
+      {/* Hero */}
+      <div className="relative h-[40vh] min-h-[280px] overflow-hidden md:rounded-b-3xl">
         <img
-          src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&h=300&fit=crop"
+          src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=1200&h=600&fit=crop"
           alt=""
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover animate-gentle-zoom"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/40 to-background" />
-        <div className="absolute bottom-0 left-0 px-6 pb-4">
-          <h1 className="text-2xl font-display font-bold text-foreground">Compare Products</h1>
-          <p className="text-xs text-muted-foreground mt-0.5">Tap a product to swap</p>
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/50 to-background" />
+        <div className="absolute bottom-0 left-0 px-6 pb-8 md:px-10">
+          <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">Compare Products</h1>
+          <p className="text-xs text-muted-foreground mt-1">Tap a product to swap</p>
         </div>
       </div>
 
-      <div className="px-5 space-y-5 mt-4">
+      <div className="px-5 md:px-10 space-y-5 -mt-6 relative z-10 md:max-w-3xl md:mx-auto">
         {selectingSlot ? (
           <div className="space-y-3 animate-fade-in">
             <p className="text-sm text-muted-foreground">Select product for Slot {selectingSlot}:</p>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="columns-2 md:columns-3 gap-3 space-y-3">
               {products.map((p) => (
-                <ProductCard
-                  key={p.id}
-                  product={p}
-                  variant="compact"
-                  onClick={() => {
-                    if (selectingSlot === "A") setProductA(p);
-                    else setProductB(p);
-                    setSelectingSlot(null);
-                  }}
-                />
+                <div key={p.id} className="break-inside-avoid">
+                  <ProductCard
+                    product={p}
+                    variant="compact"
+                    onClick={() => {
+                      if (selectingSlot === "A") setProductA(p);
+                      else setProductB(p);
+                      setSelectingSlot(null);
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </div>
