@@ -1,10 +1,10 @@
-import { routineSteps, products, calculateSafetyScore } from "@/data/mockData";
+import { amRoutineSteps, pmRoutineSteps, products, calculateSafetyScore } from "@/data/mockData";
 import { SafetyBadge } from "@/components/SafetyBadge";
 import { SafetyScoreRing } from "@/components/SafetyScoreRing";
-import { Droplets, FlaskRound, Sparkles, Cloud, Sun, ArrowDownUp } from "lucide-react";
+import { Droplets, FlaskRound, Sparkles, Cloud, Sun, ArrowDownUp, Clock, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { SafetyStatus } from "@/data/mockData";
-import { useMemo } from "react";
+import type { SafetyStatus, RoutineStep } from "@/data/mockData";
+import { useMemo, useState } from "react";
 
 const stepIcons: Record<string, React.ElementType> = {
   droplets: Droplets,
@@ -27,81 +27,127 @@ const connectorGlow: Record<SafetyStatus, string> = {
 };
 
 export default function Routine() {
+  const [period, setPeriod] = useState<"am" | "pm">("am");
+  const steps = period === "am" ? amRoutineSteps : pmRoutineSteps;
+
   const safetyScore = useMemo(() => {
-    const ids = routineSteps.map(s => s.productId).filter(Boolean) as string[];
+    const ids = steps.map(s => s.productId).filter(Boolean) as string[];
     return calculateSafetyScore(ids);
-  }, []);
+  }, [steps]);
 
   return (
-    <div className="min-h-screen pb-24">
+    <div className="min-h-screen pb-24 md:pb-8">
       {/* Hero */}
-      <div className="relative h-40 overflow-hidden">
+      <div className="relative h-[40vh] min-h-[280px] overflow-hidden md:rounded-b-3xl">
         <img
-          src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=800&h=400&fit=crop"
+          src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1200&h=600&fit=crop"
           alt=""
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover animate-gentle-zoom"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background" />
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-4 flex items-end justify-between">
+        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/50 to-background" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 md:px-10 flex items-end justify-between">
           <div>
-            <h1 className="text-2xl font-display font-bold text-foreground">Routine Builder</h1>
-            <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
-              <ArrowDownUp size={12} />
-              Auto-ordered thin → thick
+            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">Routine Sequencer</h1>
+            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+              <ArrowDownUp size={12} /> Optimized by pH & texture
             </p>
           </div>
-          <SafetyScoreRing score={safetyScore} size={72} strokeWidth={5} />
+          <SafetyScoreRing score={safetyScore} size={80} strokeWidth={5} />
+        </div>
+
+        {/* Floating AM/PM toggle */}
+        <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-10">
+          <div className="glass-strong rounded-full p-1 flex gap-1 shadow-lg">
+            <button
+              onClick={() => setPeriod("am")}
+              className={cn(
+                "px-6 py-2 rounded-full text-xs font-semibold transition-all duration-300",
+                period === "am" ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Sun size={12} className="inline mr-1.5" /> AM
+            </button>
+            <button
+              onClick={() => setPeriod("pm")}
+              className={cn(
+                "px-6 py-2 rounded-full text-xs font-semibold transition-all duration-300",
+                period === "pm" ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <Sparkles size={12} className="inline mr-1.5" /> PM
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className="px-5 space-y-5 mt-4">
+      <div className="px-5 md:px-10 space-y-4 mt-10">
+        {/* Auto-sort button */}
+        <div className="flex justify-end">
+          <button className="glass rounded-full px-4 py-1.5 text-[10px] font-semibold text-primary flex items-center gap-1.5 hover-lift">
+            <ArrowDownUp size={12} /> Auto-Sort
+          </button>
+        </div>
+
         {/* Timeline */}
-        <div className="relative space-y-0">
-          {routineSteps.map((step, index) => {
+        <div className="relative space-y-0 md:max-w-2xl md:mx-auto">
+          {steps.map((step, index) => {
             const product = products.find((p) => p.id === step.productId);
             const Icon = stepIcons[step.icon] || Sparkles;
 
             return (
               <div key={step.id} className="animate-slide-up" style={{ animationDelay: `${index * 0.08}s` }}>
-                {/* Connector */}
+                {/* Connector with wait time */}
                 {step.connectionSafety && (
-                  <div className="flex items-center justify-center py-1">
+                  <div className="flex items-center justify-center py-1 relative">
                     <div className={cn(
-                      "w-0.5 h-8 rounded-full transition-all duration-500",
+                      "w-0.5 h-10 rounded-full transition-all duration-500",
                       connectorColors[step.connectionSafety],
                       connectorGlow[step.connectionSafety],
                       step.connectionSafety === "safe" && "animate-breathe",
                       step.connectionSafety === "conflict" && "animate-pulse-warning",
                     )} />
+                    {step.waitTime && (
+                      <span className="absolute left-1/2 ml-4 glass-strong rounded-full px-2.5 py-0.5 text-[9px] font-medium text-muted-foreground flex items-center gap-1 whitespace-nowrap">
+                        <Clock size={9} /> {step.waitTime}
+                      </span>
+                    )}
                   </div>
                 )}
 
-                {/* Step Card */}
+                {/* Step Card — image-first */}
                 <div className={cn(
-                  "glass rounded-2xl p-4 flex items-center gap-4 hover-lift",
+                  "glass rounded-2xl overflow-hidden hover-lift group",
                   step.connectionSafety === "conflict" && "border-conflict/25 ring-1 ring-conflict/10",
                 )}>
-                  <div className={cn(
-                    "w-12 h-12 rounded-xl flex items-center justify-center shrink-0",
-                    "bg-gradient-to-br from-champagne to-skin-pink"
-                  )}>
-                    <Icon size={20} className="text-primary" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.15em]">
-                      Step {step.order} · {step.label}
-                    </p>
-                    {product ? (
-                      <div className="flex items-center gap-2 mt-1">
-                        <p className="font-semibold text-foreground text-sm truncate">{product.name}</p>
-                        <SafetyBadge status={product.safety} size="sm" showLabel={false} />
-                      </div>
-                    ) : (
-                      <p className="text-sm text-muted-foreground italic mt-1">Tap to assign product</p>
-                    )}
+                  <div className="flex">
+                    {/* Product image */}
                     {product && (
-                      <p className="text-[10px] text-muted-foreground mt-0.5">Viscosity: {product.viscosity}/5</p>
+                      <div className="w-24 md:w-32 shrink-0 relative overflow-hidden">
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/30" />
+                      </div>
                     )}
+                    <div className="p-4 flex-1 flex items-center gap-3">
+                      <div className={cn(
+                        "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                        "bg-gradient-to-br from-champagne to-skin-pink"
+                      )}>
+                        <Icon size={18} className="text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.15em]">
+                          Step {step.order} · {step.label}
+                        </p>
+                        {product ? (
+                          <div className="flex items-center gap-2 mt-1">
+                            <p className="font-semibold text-foreground text-sm truncate">{product.name}</p>
+                            <SafetyBadge status={product.safety} size="sm" showLabel={false} />
+                          </div>
+                        ) : (
+                          <p className="text-sm text-muted-foreground italic mt-1">Tap to assign product</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -109,23 +155,17 @@ export default function Routine() {
           })}
         </div>
 
-        {/* Summary */}
-        <div className="glass-strong rounded-2xl p-5 space-y-3 animate-slide-up" style={{ animationDelay: "0.5s" }}>
-          <h3 className="font-display font-semibold text-foreground text-lg">Routine Analysis</h3>
-          <div className="grid grid-cols-3 gap-2.5">
-            <div className="bg-safe/8 rounded-xl p-3 text-center border border-safe/15">
-              <p className="text-xl font-bold text-safe-foreground font-display">3</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Safe</p>
-            </div>
-            <div className="bg-caution/8 rounded-xl p-3 text-center border border-caution/15">
-              <p className="text-xl font-bold text-caution-foreground font-display">1</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Caution</p>
-            </div>
-            <div className="bg-conflict/8 rounded-xl p-3 text-center border border-conflict/15">
-              <p className="text-xl font-bold text-conflict-foreground font-display">1</p>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">Conflict</p>
-            </div>
+        {/* Timing Guide */}
+        <div className="glass rounded-2xl p-5 space-y-3 animate-slide-up md:max-w-2xl md:mx-auto" style={{ animationDelay: "0.5s" }}>
+          <div className="flex items-center gap-2">
+            <Info size={14} className="text-primary" />
+            <h3 className="font-display font-semibold text-foreground">Timing Guide</h3>
           </div>
+          <ul className="space-y-2 text-xs text-muted-foreground">
+            <li className="flex items-start gap-2"><span className="text-primary mt-0.5">•</span> Wait 1-2 minutes between active serums for full absorption</li>
+            <li className="flex items-start gap-2"><span className="text-primary mt-0.5">•</span> Apply SPF as the final step, at least 15 min before sun exposure</li>
+            <li className="flex items-start gap-2"><span className="text-primary mt-0.5">•</span> Thinnest → thickest consistency ensures maximum penetration</li>
+          </ul>
         </div>
       </div>
     </div>

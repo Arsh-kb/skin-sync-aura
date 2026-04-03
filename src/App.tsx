@@ -8,7 +8,11 @@ import Dashboard from "@/pages/Dashboard";
 import Shelf from "@/pages/Shelf";
 import Routine from "@/pages/Routine";
 import Compare from "@/pages/Compare";
+import Conflicts from "@/pages/Conflicts";
+import Shop from "@/pages/Shop";
+import Advisory from "@/pages/Advisory";
 import Assistant from "@/pages/Assistant";
+import Progress from "@/pages/Progress";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,7 +29,11 @@ const App = () => (
             <Route path="/shelf" element={<Shelf />} />
             <Route path="/routine" element={<Routine />} />
             <Route path="/compare" element={<Compare />} />
+            <Route path="/conflicts" element={<Conflicts />} />
+            <Route path="/shop" element={<Shop />} />
+            <Route path="/advisory" element={<Advisory />} />
             <Route path="/assistant" element={<Assistant />} />
+            <Route path="/progress" element={<Progress />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
