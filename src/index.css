@@ -156,12 +156,49 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
+  .glass-rose {
+    background: rgba(249, 228, 228, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(232, 180, 184, 0.2);
+    box-shadow: 0 8px 32px rgba(141, 91, 76, 0.06);
+  }
+
+  .gradient-blush {
+    background: linear-gradient(135deg, hsl(var(--skin-pink)), hsl(var(--skin-cream)));
+  }
+
+  .gradient-warm {
+    background: linear-gradient(135deg, hsl(var(--skin-peach)), hsl(var(--champagne)));
+  }
+
+  .gradient-rose-soft {
+    background: linear-gradient(180deg, hsl(var(--skin-pink) / 0.3), hsl(var(--skin-cream) / 0.1));
+  }
+
   .hover-lift {
     @apply transition-all duration-500 ease-out;
   }
 
   .hover-lift:hover {
-    @apply -translate-y-1.5 shadow-2xl;
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 20px 40px -12px rgba(141, 91, 76, 0.15);
+  }
+
+  .card-tilt {
+    @apply transition-all duration-500 ease-out;
+  }
+
+  .card-tilt:hover {
+    transform: rotate(-1deg) translateY(-4px) scale(1.01);
+    box-shadow: 0 16px 32px -8px rgba(141, 91, 76, 0.12);
+  }
+
+  .deco-circle {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--skin-rose) / 0.15), transparent 70%);
+    pointer-events: none;
+    filter: blur(40px);
   }
 
   .safety-glow-safe {

@@ -1,4 +1,5 @@
 import { advisoryItems } from "@/data/mockData";
+import { TrendingCard } from "@/components/TrendingCard";
 import { Apple, Leaf, Check } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -18,7 +19,10 @@ export default function Advisory() {
   const [tab, setTab] = useState<"nutrition" | "diy">("nutrition");
 
   return (
-    <div className="min-h-screen pb-24 md:pb-8">
+    <div className="min-h-screen pb-24 md:pb-8 relative overflow-hidden">
+      {/* Decorative bokeh */}
+      <div className="deco-circle w-[200px] h-[200px] bottom-[20vh] right-[-60px] fixed opacity-30" />
+
       {/* Hero */}
       <div className="relative h-[40vh] min-h-[280px] overflow-hidden md:rounded-b-3xl">
         <img
@@ -34,7 +38,7 @@ export default function Advisory() {
 
         {/* Floating tab toggle */}
         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-10">
-          <div className="glass-strong rounded-full p-1 flex gap-1 shadow-lg">
+          <div className="glass-rose rounded-full p-1 flex gap-1 shadow-lg">
             <button
               onClick={() => setTab("nutrition")}
               className={cn(
@@ -59,35 +63,31 @@ export default function Advisory() {
 
       <div className="px-5 md:px-10 space-y-5 mt-10">
         {tab === "nutrition" ? (
-          <div className="space-y-5">
+          <div className="space-y-4">
             {advisoryItems.map((item, i) => (
               <div
                 key={item.id}
-                className={cn(
-                  "glass rounded-2xl overflow-hidden hover-lift animate-slide-up group",
-                  i % 2 === 0 ? "md:mr-16" : "md:ml-16"
-                )}
+                className="animate-slide-up"
                 style={{ animationDelay: `${i * 0.08}s` }}
               >
-                <div className="relative h-44 md:h-52 overflow-hidden">
-                  <img src={item.image} alt={item.concern} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-4">
-                    <span className="text-2xl mr-2">{item.emoji}</span>
-                    <h3 className="font-display font-bold text-foreground text-xl inline">{item.concern}</h3>
-                  </div>
-                </div>
-                <div className="p-5 space-y-3">
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                  <div>
-                    <p className="text-[10px] font-semibold text-primary uppercase tracking-[0.15em] mb-2">Recommended Foods</p>
-                    <div className="flex flex-wrap gap-2">
-                      {item.foods.map((food) => (
-                        <span key={food} className="text-xs px-3 py-1 rounded-full bg-champagne/60 text-foreground font-medium">
-                          {food}
-                        </span>
-                      ))}
-                    </div>
+                <TrendingCard
+                  image={item.image}
+                  title={`${item.emoji} ${item.concern}`}
+                  description={item.description}
+                  variant={i % 2 === 0 ? "blush" : "warm"}
+                />
+                {/* Expanded food list */}
+                <div className={cn(
+                  "rounded-b-2xl px-4 py-3 -mt-2",
+                  i % 2 === 0 ? "glass-rose" : "gradient-warm"
+                )}>
+                  <p className="text-[10px] font-semibold text-primary uppercase tracking-[0.15em] mb-2">Recommended Foods</p>
+                  <div className="flex flex-wrap gap-2">
+                    {item.foods.map((food) => (
+                      <span key={food} className="text-xs px-3 py-1 rounded-full gradient-blush text-foreground font-medium">
+                        {food}
+                      </span>
+                    ))}
                   </div>
                 </div>
               </div>
@@ -100,14 +100,14 @@ export default function Advisory() {
               <div
                 key={ing.name}
                 className={cn(
-                  "glass rounded-2xl p-4 flex items-start gap-3 hover-lift animate-slide-up",
-                  !ing.safe && "border border-conflict/15"
+                  "rounded-2xl p-4 flex items-start gap-3 card-tilt animate-slide-up",
+                  ing.safe ? "glass-rose" : "glass border border-conflict/15"
                 )}
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 <div className={cn(
                   "w-9 h-9 rounded-xl flex items-center justify-center shrink-0 mt-0.5",
-                  ing.safe ? "bg-safe/15" : "bg-conflict/15"
+                  ing.safe ? "gradient-blush" : "bg-conflict/15"
                 )}>
                   {ing.safe
                     ? <Check size={16} className="text-safe" />
