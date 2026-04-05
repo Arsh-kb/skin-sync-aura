@@ -1,98 +1,95 @@
 
 
-# CosmetiQ AI — Visual & Engagement Upgrade
+# CosmetiQ AI — Expert-Level UX Features + 3D Visuals
 
-## What the Reference Images Show
+## Features to Implement
 
-The uploaded references are premium skincare brand websites and mobile apps with these standout traits the current app lacks:
+From the approved list (excluding #6 Social Proof):
 
-1. **Dramatic hero imagery with model/face photography** — large close-ups of faces, not just product shots
-2. **Warm pink/blush gradient washes** — soft pink-to-cream backgrounds, not just neutral linen
-3. **Floating product photography with depth** — products appear to "pop out" with shadows and slight rotation
-4. **Category browsing with circular thumbnails** — "Face", "Body", "Hair", "Gifts" style category selectors
-5. **Trending/Popular sections** with horizontal cards featuring product image + title + short description on warm blush backgrounds
-6. **Split-screen layouts** — image on one side, content on the other (not stacked)
-7. **Decorative elements** — floral accents, soft bokeh, ornamental corners
-8. **Onboarding/splash feel** — the first screen feels like a brand campaign, not a tool
+1. **Skin Profile Onboarding** — 3-step animated quiz
+2. **Before/After Comparison Slider** — draggable split-view on Progress page
+3. **Product Scanner Simulation** — fullscreen scan modal with ingredient reveal
+4. **Time-Aware In-App Nudges** — contextual banners on Dashboard
+5. **Ingredient Encyclopedia Modal** — bottom sheet on ingredient tap
+7. **Micro-Animations & Delight** — count-up scores, shake on conflict, enhanced transitions
 
-## What Needs to Change
-
-The current app is well-structured but still feels **tool-like**. The upgrade focuses on making it feel like a **luxury brand experience** users want to open daily.
+Plus: **3D visuals and rich imagery** wherever possible.
 
 ---
 
-## Plan
+## Technical Plan
 
-### 1. Enhanced Color System & Gradients
+### 1. Onboarding Page (`/onboarding`)
 
-Add warm pink gradient washes to `index.css`:
-- New gradient utilities: `gradient-blush` (soft pink → cream), `gradient-warm` (peach → champagne)
-- Rose-tinted glassmorphism variant: `glass-rose` with `bg-pink-50/40 backdrop-blur-xl`
-- Soft pink background sections instead of uniform linen everywhere
+New `src/pages/Onboarding.tsx`:
+- 3-step full-screen flow: Skin Type → Concerns → Goals
+- Each step has a full-bleed lifestyle image background with gradient overlay
+- Floating selection pills (Normal/Oily/Dry/Combo, then Acne/Aging/Dullness/Sensitivity, then Glow/Repair/Prevent/Balance)
+- Animated step indicator dots
+- "Skip" option in corner; "Next" CTA pill at bottom
+- On complete, stores profile in localStorage and navigates to `/`
+- Add route in `App.tsx`; show onboarding if no profile exists
 
-### 2. Dashboard → Brand Campaign Landing
+### 2. Before/After Slider on Progress Page
 
-Rewrite `Dashboard.tsx` to feel like a beauty brand homepage:
-- **Split hero** (desktop): Left side — large greeting text with "Your skin deserves molecular intelligence" tagline + CTA buttons; Right side — face/model close-up image with floating product cards orbiting around it
-- **Mobile**: Full-bleed face close-up with greeting overlaid, floating circular category selectors below ("Routine", "Shelf", "Compare", "Guardian") like the reference app
-- **"Trending for You" section**: Horizontal cards on warm blush backgrounds with product image + title + one-line benefit (like the Cream/Facial Serum/Lipstick reference cards)
-- **Remove analytical stat cards** — replace with a single elegant "Skin Status" floating badge with the safety ring embedded
-- **Decorative soft-focus bokeh circles** as background elements (CSS pseudo-elements with radial gradients)
+New `src/components/BeforeAfterSlider.tsx`:
+- Two placeholder images side-by-side with a draggable vertical divider
+- Uses mouse/touch events for slider position (no extra deps)
+- Week selector pills above (Week 1 vs Week 4)
+- "Your Transformation" heading with emotional copy
+- Integrated into `Progress.tsx` as a new section between photo journal and daily rating
 
-### 3. Digital Shelf → Product Discovery Experience
+### 3. Scanner Modal
 
-Update `Shelf.tsx`:
-- **Circular category selector row** at top: "Actives", "Hydrators", "Exfoliants", "Cleansers" with product thumbnail in each circle (like the Face/Body/Hair/Gifts reference)
-- **"Popular Products" horizontal scroll** with larger cards that have warm blush backgrounds instead of plain glass
-- **Product cards**: Add subtle rotation/tilt on hover, warmer pink-tinted gradient overlays instead of neutral ones
-- Keep masonry grid but add alternating blush/champagne background tints to cards
+New `src/components/ScannerModal.tsx`:
+- Triggered by a floating FAB on Shelf page (bottom-right, glassmorphic, camera icon)
+- Opens fullscreen dialog with simulated camera viewfinder (animated scanning line)
+- After 2s animation, reveals: product name, ingredient chips with safety colors, animated safety score ring (count-up from 0)
+- "Add to Shelf" CTA at bottom
+- Uses existing Dialog component
 
-### 4. Shop → Split-Screen Premium Marketplace
+### 4. Time-Aware Nudges
 
-Update `Shop.tsx`:
-- **Desktop hero**: Split layout — left side has headline "Care for Your Skin" with filter pills + CTA; right side has large model/face image with floating product cards overlaid (like CAREON reference)
-- **"Special Offer" floating card** with gradient blush background overlapping the hero
-- **Product cards**: Warmer, with blush gradient backgrounds instead of plain glass. Price tag as a floating pill badge
+New `src/components/TimeNudge.tsx`:
+- Reads `new Date().getHours()` to determine time period
+- Morning (6-11): Sunrise gradient banner — "Start your AM routine"
+- Midday (11-15): Amber banner — "UV is high — reapply SPF"
+- Evening (17-22): Moon gradient — "Wind down with your PM routine"
+- Night (22-6): Subtle — "Rest mode — skin repairs overnight"
+- Integrated into Dashboard between hero and category circles
+- Glassmorphic floating banner with icon + text + CTA button
 
-### 5. New Component: CategoryCircle
+### 5. Ingredient Encyclopedia
 
-Reusable circular thumbnail selector used on Dashboard and Shelf:
-- Circular image container with soft border
-- Label below
-- Active state: rose ring highlight
-- Used for: product categories, routine shortcuts, skin concerns
+New `src/components/IngredientSheet.tsx`:
+- Uses Drawer (vaul) component for bottom sheet
+- Props: ingredient name, opens with details
+- Shows: name, category badge, description, skin types, conflicts list, "Found in X of your products" count
+- Warm blush background with large serif heading
+- Add `ingredientEncyclopedia` data to `mockData.ts` (10-12 common ingredients with descriptions)
+- Wire up: make ingredient chips clickable in ProductCard, Routine step cards, and Conflicts page
 
-### 6. New Component: TrendingCard
+### 6. 3D Visuals & Rich Imagery
 
-Horizontal card with:
-- Product image on left (40%)
-- Warm blush/champagne background
-- Title + short description on right
-- Subtle arrow or "Learn more" link
-- Used on Dashboard "Trending" section and Advisory page
+- **3D Rotating Product on Dashboard**: Use `@react-three/fiber@^8.18` + `@react-three/drei@^9.122.0` to render a floating 3D cylinder (product bottle) with soft lighting on the Dashboard hero section (desktop only). Fallback to static image on mobile/when WebGL unavailable.
+- **3D Molecule on Conflicts page**: A simple rotating icosahedron geometry representing "molecular analysis" in the hero section
+- **Parallax depth**: CSS `perspective` + `translateZ` on hero images for subtle depth on scroll
+- **Animated gradient orbs**: Additional `.deco-circle` elements with varied colors and sizes on every page
 
-### 7. Advisory Page Enhancement
+### 7. Micro-Animations & Delight
 
-Update `Advisory.tsx`:
-- Replace plain list layout with **TrendingCard** style for nutrition items
-- Add warm blush section backgrounds alternating with cream
-- Larger food imagery in each card
+In `src/index.css`:
+- `@keyframes count-up` — used via JS in SafetyScoreRing (already has animated score, enhance with easing)
+- `@keyframes shake` — `transform: translateX(-2px) → 2px → 0` for conflict detection
+- `.animate-shake` class
+- Enhanced SafetyScoreRing: smoother count-up with requestAnimationFrame instead of setTimeout
+- Add `animate-fade-in` utility for ingredient sheet content
 
-### 8. Progress Page Enhancement
+### 8. Data Additions (`mockData.ts`)
 
-Update `Progress.tsx`:
-- Photo journal slots: Use warm gradient backgrounds (pink → cream) instead of plain glass
-- Add motivational quotes/messages that rotate
-- Streak grid: Use warm rose tones instead of primary-only (gradient from champagne → deep clay)
-
-### 9. Global Polish
-
-In `index.css` and `tailwind.config.ts`:
-- Add `glass-rose` utility
-- Add `gradient-blush`, `gradient-warm` utilities  
-- Add decorative bokeh/blur circle CSS (`.deco-circle`) for background ambiance
-- Add `card-tilt` hover animation (subtle 1-2deg rotation)
-- Enhance `hover-lift` with slight scale(1.02) in addition to translateY
+- `skinProfileOptions` object with types/concerns/goals arrays
+- `ingredientEncyclopedia`: Record of ingredient name → { category, description, skinTypes, benefits, caution }
+- `scannerDemoProduct` object for scanner simulation result
 
 ---
 
@@ -100,13 +97,20 @@ In `index.css` and `tailwind.config.ts`:
 
 | File | Action |
 |------|--------|
-| `src/index.css` | Add gradient utilities, glass-rose, decorative styles |
-| `tailwind.config.ts` | Add rose/blush color extensions |
-| `src/components/CategoryCircle.tsx` | Create — circular category selector |
-| `src/components/TrendingCard.tsx` | Create — horizontal product/info card |
-| `src/pages/Dashboard.tsx` | Rewrite — split hero, category circles, trending section |
-| `src/pages/Shelf.tsx` | Update — add category circles, blush-tinted cards |
-| `src/pages/Shop.tsx` | Update — split hero, special offer card |
-| `src/pages/Advisory.tsx` | Update — trending card layout |
-| `src/pages/Progress.tsx` | Update — warmer gradients, motivational text |
+| `src/pages/Onboarding.tsx` | Create — 3-step skin profile quiz |
+| `src/components/BeforeAfterSlider.tsx` | Create — draggable comparison slider |
+| `src/components/ScannerModal.tsx` | Create — product scan simulation |
+| `src/components/IngredientSheet.tsx` | Create — ingredient encyclopedia bottom sheet |
+| `src/components/TimeNudge.tsx` | Create — time-aware contextual banners |
+| `src/components/Scene3D.tsx` | Create — 3D product/molecule visuals |
+| `src/pages/Dashboard.tsx` | Update — add TimeNudge, 3D product visual |
+| `src/pages/Progress.tsx` | Update — add BeforeAfterSlider section |
+| `src/pages/Shelf.tsx` | Update — add Scanner FAB, ingredient tap handlers |
+| `src/pages/Conflicts.tsx` | Update — add 3D molecule, shake animation |
+| `src/components/SafetyScoreRing.tsx` | Update — smoother count-up animation |
+| `src/components/ProductCard.tsx` | Update — clickable ingredient chips |
+| `src/data/mockData.ts` | Extend — encyclopedia, profile options, scanner data |
+| `src/App.tsx` | Add `/onboarding` route |
+| `src/index.css` | Add shake, parallax, enhanced animation utilities |
+| `package.json` | Add `@react-three/fiber@^8.18`, `@react-three/drei@^9.122.0`, `three@^0.160` |
 
