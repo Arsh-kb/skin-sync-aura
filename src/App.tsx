@@ -13,6 +13,7 @@ import Shop from "@/pages/Shop";
 import Advisory from "@/pages/Advisory";
 import Assistant from "@/pages/Assistant";
 import Progress from "@/pages/Progress";
+import Onboarding from "@/pages/Onboarding";
 import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/onboarding" element={<Onboarding />} />
           <Route element={<AppLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="/shelf" element={<Shelf />} />

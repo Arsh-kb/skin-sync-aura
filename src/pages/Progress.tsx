@@ -1,5 +1,6 @@
 import { progressData } from "@/data/mockData";
 import { SafetyScoreRing } from "@/components/SafetyScoreRing";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { Camera, Star, Flame, TrendingUp, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState, useMemo } from "react";
@@ -17,16 +18,11 @@ export default function Progress() {
 
   return (
     <div className="min-h-screen pb-24 md:pb-8 relative overflow-hidden">
-      {/* Decorative bokeh */}
       <div className="deco-circle w-[280px] h-[280px] top-[50vh] left-[-100px] fixed opacity-30" />
 
       {/* Hero */}
       <div className="relative h-[40vh] min-h-[280px] overflow-hidden md:rounded-b-3xl">
-        <img
-          src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1200&h=600&fit=crop"
-          alt=""
-          className="w-full h-full object-cover animate-gentle-zoom"
-        />
+        <img src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1200&h=600&fit=crop" alt="" className="w-full h-full object-cover animate-gentle-zoom" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/50 to-background" />
         <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 md:px-10 flex items-end justify-between">
           <div>
@@ -48,8 +44,13 @@ export default function Progress() {
           <p className="text-sm text-foreground font-light italic leading-relaxed">{quote}</p>
         </div>
 
+        {/* Before/After Slider */}
+        <div className="animate-slide-up" style={{ animationDelay: "0.05s" }}>
+          <BeforeAfterSlider />
+        </div>
+
         {/* Weekly Photo Journal */}
-        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.05s" }}>
+        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.1s" }}>
           <h2 className="font-display font-semibold text-lg text-foreground px-1">Weekly Photo Journal</h2>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-1 px-1">
             {progressData.weeks.map((week, i) => (
@@ -70,13 +71,7 @@ export default function Progress() {
                     {week.rating && (
                       <div className="flex items-center gap-0.5 justify-center mt-1">
                         {[...Array(5)].map((_, j) => (
-                          <Star
-                            key={j}
-                            size={10}
-                            className={cn(
-                              j < Math.floor(week.rating!) ? "text-primary fill-primary" : "text-muted-foreground/30"
-                            )}
-                          />
+                          <Star key={j} size={10} className={cn(j < Math.floor(week.rating!) ? "text-primary fill-primary" : "text-muted-foreground/30")} />
                         ))}
                       </div>
                     )}
@@ -88,49 +83,29 @@ export default function Progress() {
         </div>
 
         {/* Daily Skin Rating */}
-        <div className="glass-rose rounded-2xl p-6 space-y-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+        <div className="glass-rose rounded-2xl p-6 space-y-4 animate-slide-up" style={{ animationDelay: "0.15s" }}>
           <h3 className="font-display font-semibold text-foreground text-lg">How does your skin feel today?</h3>
           <div className="flex items-center gap-3 justify-center">
             {[1, 2, 3, 4, 5].map((rating) => (
-              <button
-                key={rating}
-                onClick={() => setDailyRating(rating)}
-                className="transition-all duration-300 hover:scale-125"
-              >
-                <Star
-                  size={32}
-                  className={cn(
-                    "transition-colors duration-300",
-                    rating <= dailyRating
-                      ? "text-primary fill-primary"
-                      : "text-muted-foreground/30 hover:text-primary/50"
-                  )}
-                />
+              <button key={rating} onClick={() => setDailyRating(rating)} className="transition-all duration-300 hover:scale-125">
+                <Star size={32} className={cn("transition-colors duration-300", rating <= dailyRating ? "text-primary fill-primary" : "text-muted-foreground/30 hover:text-primary/50")} />
               </button>
             ))}
           </div>
           {dailyRating > 0 && (
-            <p className="text-xs text-muted-foreground text-center animate-fade-in">
+            <p className="text-xs text-muted-foreground text-center animate-fade-in-scale">
               {dailyRating >= 4 ? "Great! Your routine is working ✨" : dailyRating >= 3 ? "Good progress! Keep going 💪" : "Let's adjust your routine for better results 🔬"}
             </p>
           )}
         </div>
 
-        {/* Routine Streak Grid */}
-        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.15s" }}>
+        {/* Streak Grid */}
+        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.2s" }}>
           <h2 className="font-display font-semibold text-foreground text-lg px-1">Routine Streak</h2>
           <div className="glass-rose rounded-2xl p-5">
             <div className="grid grid-cols-7 gap-1.5">
               {progressData.streakDays.map((day, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    "aspect-square rounded-md transition-colors duration-300",
-                    day === 1
-                      ? i < 7 ? "bg-champagne" : i < 14 ? "bg-skin-peach" : i < 21 ? "bg-skin-rose" : "bg-primary"
-                      : "bg-muted/30"
-                  )}
-                />
+                <div key={i} className={cn("aspect-square rounded-md transition-colors duration-300", day === 1 ? i < 7 ? "bg-champagne" : i < 14 ? "bg-skin-peach" : i < 21 ? "bg-skin-rose" : "bg-primary" : "bg-muted/30")} />
               ))}
             </div>
             <div className="flex items-center justify-between mt-3">
@@ -148,7 +123,7 @@ export default function Progress() {
         </div>
 
         {/* Effectiveness */}
-        <div className="flex flex-col md:flex-row gap-4 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+        <div className="flex flex-col md:flex-row gap-4 animate-slide-up" style={{ animationDelay: "0.25s" }}>
           <div className="glass-rose rounded-2xl p-6 flex items-center gap-5 flex-1 card-tilt">
             <SafetyScoreRing score={progressData.effectivenessScore} size={90} strokeWidth={6} />
             <div>

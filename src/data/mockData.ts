@@ -161,11 +161,8 @@ export const pmRoutineSteps: RoutineStep[] = [
   { id: "pm4", order: 4, label: "Moisturizer", icon: "cloud", productId: "4", connectionSafety: "safe", waitTime: "1 min" },
 ];
 
-// Keep backward compat
 export const routineSteps = amRoutineSteps;
 
-// Level 1 (Red): Direct contraindications
-// Level 2 (Yellow): Efficacy conflicts
 export const ingredientConflicts: Record<string, { conflicts: string[]; level: "red" | "yellow" }> = {
   "Retinol": { conflicts: ["Vitamin C", "Glycolic Acid", "Salicylic Acid", "Benzoyl Peroxide"], level: "red" },
   "Vitamin C": { conflicts: ["Retinol", "Benzoyl Peroxide"], level: "red" },
@@ -175,7 +172,6 @@ export const ingredientConflicts: Record<string, { conflicts: string[]; level: "
   "Benzoyl Peroxide": { conflicts: ["Retinol", "Vitamin C"], level: "red" },
 };
 
-// Simple conflict lookup (backward compat)
 export const ingredientConflictsSimple: Record<string, string[]> = Object.fromEntries(
   Object.entries(ingredientConflicts).map(([k, v]) => [k, v.conflicts])
 );
@@ -351,4 +347,137 @@ export const progressData = {
   effectivenessScore: 78,
   totalDays: 28,
   currentStreak: 7,
+};
+
+// ============ NEW DATA FOR EXPERT UX FEATURES ============
+
+export const skinProfileOptions = {
+  types: [
+    { id: "normal", label: "Normal", emoji: "✨", image: "https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=300&h=300&fit=crop" },
+    { id: "oily", label: "Oily", emoji: "💧", image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop" },
+    { id: "dry", label: "Dry", emoji: "🍂", image: "https://images.unsplash.com/photo-1570194065650-d99fb4a38c5f?w=300&h=300&fit=crop" },
+    { id: "combo", label: "Combination", emoji: "⚖️", image: "https://images.unsplash.com/photo-1612817288484-6f916006741a?w=300&h=300&fit=crop" },
+  ],
+  concerns: [
+    { id: "acne", label: "Acne", emoji: "🫧" },
+    { id: "aging", label: "Anti-Aging", emoji: "🧬" },
+    { id: "dullness", label: "Dullness", emoji: "✨" },
+    { id: "sensitivity", label: "Sensitivity", emoji: "🌸" },
+    { id: "pigmentation", label: "Dark Spots", emoji: "☀️" },
+    { id: "dryness", label: "Dryness", emoji: "💧" },
+  ],
+  goals: [
+    { id: "glow", label: "Glow", emoji: "🌟" },
+    { id: "repair", label: "Repair", emoji: "🔬" },
+    { id: "prevent", label: "Prevent", emoji: "🛡️" },
+    { id: "balance", label: "Balance", emoji: "⚖️" },
+  ],
+};
+
+export interface IngredientInfo {
+  category: IngredientCategory;
+  description: string;
+  skinTypes: string[];
+  benefits: string[];
+  caution: string;
+}
+
+export const ingredientEncyclopedia: Record<string, IngredientInfo> = {
+  "Vitamin C": {
+    category: "antioxidant",
+    description: "A powerful antioxidant that brightens skin, evens tone, and protects against UV-induced free radical damage. L-ascorbic acid is the most potent form.",
+    skinTypes: ["Normal", "Oily", "Combination"],
+    benefits: ["Brightening", "Anti-aging", "UV protection", "Collagen synthesis"],
+    caution: "Can cause irritation at high concentrations. Unstable in light — use opaque packaging.",
+  },
+  "Retinol": {
+    category: "active",
+    description: "A vitamin A derivative that accelerates cell turnover, boosts collagen, and reduces fine lines. The gold standard in anti-aging.",
+    skinTypes: ["Normal", "Oily"],
+    benefits: ["Anti-aging", "Cell renewal", "Acne treatment", "Texture refinement"],
+    caution: "Start slow (2-3x/week). Increases sun sensitivity — always use SPF. Avoid during pregnancy.",
+  },
+  "Hyaluronic Acid": {
+    category: "hydrator",
+    description: "A humectant that holds 1000x its weight in water. Draws moisture into the skin for instant plumping and hydration.",
+    skinTypes: ["All skin types"],
+    benefits: ["Deep hydration", "Plumping", "Fine line reduction", "Barrier support"],
+    caution: "Apply to damp skin. In very dry climates, may draw moisture from skin without occlusive layer.",
+  },
+  "Niacinamide": {
+    category: "active",
+    description: "Vitamin B3 that strengthens the skin barrier, controls oil, minimizes pores, and reduces redness. Extremely well-tolerated.",
+    skinTypes: ["All skin types"],
+    benefits: ["Oil control", "Pore minimizing", "Barrier repair", "Anti-redness"],
+    caution: "Generally very safe. Some older research suggested conflict with Vitamin C, but modern formulations are compatible.",
+  },
+  "Glycolic Acid": {
+    category: "exfoliant",
+    description: "An alpha-hydroxy acid (AHA) that dissolves dead skin cells on the surface. Smallest AHA molecule for deepest penetration.",
+    skinTypes: ["Normal", "Oily", "Combination"],
+    benefits: ["Exfoliation", "Brightening", "Texture smoothing", "Hyperpigmentation"],
+    caution: "Start with low concentrations (5-10%). Increases sun sensitivity. Do not combine with retinol.",
+  },
+  "Salicylic Acid": {
+    category: "exfoliant",
+    description: "A beta-hydroxy acid (BHA) that penetrates into pores to dissolve oil and debris. The go-to for acne-prone skin.",
+    skinTypes: ["Oily", "Acne-prone"],
+    benefits: ["Pore clearing", "Anti-acne", "Oil control", "Anti-inflammatory"],
+    caution: "Can be drying. Do not combine with other exfoliants. Not recommended during pregnancy.",
+  },
+  "Ceramides": {
+    category: "hydrator",
+    description: "Lipids naturally found in skin that form the barrier. Topical ceramides restore and strengthen this protective layer.",
+    skinTypes: ["All skin types", "Sensitive", "Dry"],
+    benefits: ["Barrier repair", "Moisture retention", "Sensitivity reduction", "Anti-aging"],
+    caution: "No known conflicts. Safe for all skin types including sensitive and eczema-prone skin.",
+  },
+  "Squalane": {
+    category: "emollient",
+    description: "A stable, plant-derived form of squalene — a lipid naturally produced by skin. Lightweight yet deeply moisturizing.",
+    skinTypes: ["All skin types"],
+    benefits: ["Moisturizing", "Non-comedogenic", "Anti-oxidant", "Softening"],
+    caution: "Generally safe. Ensure product is squalane (hydrogenated) not squalene (unstable).",
+  },
+  "Peptides": {
+    category: "active",
+    description: "Short chains of amino acids that signal skin to produce more collagen. Gentle yet effective anti-aging ingredients.",
+    skinTypes: ["All skin types"],
+    benefits: ["Collagen boosting", "Firming", "Anti-wrinkle", "Barrier support"],
+    caution: "Some peptides may be less effective when combined with certain acids (AHAs/BHAs).",
+  },
+  "Zinc Oxide": {
+    category: "spf",
+    description: "A mineral UV filter that provides broad-spectrum protection by sitting on skin's surface and reflecting UV rays.",
+    skinTypes: ["All skin types", "Sensitive"],
+    benefits: ["UV protection", "Anti-inflammatory", "Non-irritating", "Reef-safe"],
+    caution: "May leave white cast on darker skin tones. Look for micronized or tinted formulas.",
+  },
+  "Ferulic Acid": {
+    category: "antioxidant",
+    description: "A plant-based antioxidant that boosts the efficacy of vitamins C and E. Stabilizes vitamin C formulations.",
+    skinTypes: ["All skin types"],
+    benefits: ["Antioxidant boost", "UV protection enhancement", "Anti-aging", "Brightening"],
+    caution: "Generally very well tolerated. Best used in combination with vitamins C and E.",
+  },
+  "Centella Asiatica": {
+    category: "active",
+    description: "Also known as Cica or Tiger Grass. Soothes inflammation, accelerates wound healing, and strengthens the skin barrier.",
+    skinTypes: ["Sensitive", "All skin types"],
+    benefits: ["Soothing", "Anti-inflammatory", "Wound healing", "Barrier repair"],
+    caution: "Rare allergic reactions possible. Patch test if you have plant allergies.",
+  },
+};
+
+export const scannerDemoProduct = {
+  name: "Glow Recipe Watermelon Niacinamide Dew Drops",
+  brand: "Glow Recipe",
+  image: "https://images.unsplash.com/photo-1617897903246-719242758050?w=400&h=500&fit=crop",
+  ingredients: [
+    { name: "Niacinamide", category: "active" as IngredientCategory },
+    { name: "Hyaluronic Acid", category: "hydrator" as IngredientCategory },
+    { name: "Vitamin C", category: "antioxidant" as IngredientCategory },
+    { name: "Centella Asiatica", category: "active" as IngredientCategory },
+  ],
+  safetyScore: 82,
 };
