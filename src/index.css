@@ -130,24 +130,43 @@
     font-family: 'DM Sans', sans-serif;
   }
 
+  /* Grain texture overlay */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.018;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 256px 256px;
+  }
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 }
 
 @layer utilities {
   .glass {
-    @apply bg-white/50 backdrop-blur-xl border border-white/25 shadow-lg;
+    @apply backdrop-blur-xl shadow-lg;
+    background: hsl(var(--card) / 0.55);
+    border: 1px solid hsl(var(--border) / 0.15);
   }
 
   .glass-strong {
-    @apply bg-white/70 backdrop-blur-2xl border border-white/35 shadow-xl;
+    @apply backdrop-blur-2xl shadow-xl;
+    background: hsl(var(--card) / 0.75);
+    border: 1px solid hsl(var(--border) / 0.2);
   }
 
   .glass-subtle {
-    @apply bg-white/30 backdrop-blur-md border border-white/15 shadow-md;
+    @apply backdrop-blur-md shadow-md;
+    background: hsl(var(--card) / 0.35);
+    border: 1px solid hsl(var(--border) / 0.1);
   }
 
   .glass-dark {
@@ -157,10 +176,10 @@
   }
 
   .glass-rose {
-    background: rgba(249, 228, 228, 0.4);
+    background: hsl(var(--skin-pink) / 0.45);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(232, 180, 184, 0.2);
-    box-shadow: 0 8px 32px rgba(141, 91, 76, 0.06);
+    border: 1px solid hsl(var(--skin-rose) / 0.12);
+    box-shadow: 0 8px 32px hsl(var(--primary) / 0.06);
   }
 
   .gradient-blush {
@@ -175,13 +194,18 @@
     background: linear-gradient(180deg, hsl(var(--skin-pink) / 0.3), hsl(var(--skin-cream) / 0.1));
   }
 
+  .divider-elegant {
+    @apply h-px w-full;
+    background: linear-gradient(90deg, transparent, hsl(var(--border) / 0.4), transparent);
+  }
+
   .hover-lift {
     @apply transition-all duration-500 ease-out;
   }
 
   .hover-lift:hover {
     transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 20px 40px -12px rgba(141, 91, 76, 0.15);
+    box-shadow: 0 24px 48px -16px hsl(var(--primary) / 0.12);
   }
 
   .card-tilt {
@@ -189,8 +213,8 @@
   }
 
   .card-tilt:hover {
-    transform: rotate(-1deg) translateY(-4px) scale(1.01);
-    box-shadow: 0 16px 32px -8px rgba(141, 91, 76, 0.12);
+    transform: rotate(-0.5deg) translateY(-4px) scale(1.01);
+    box-shadow: 0 20px 40px -12px hsl(var(--primary) / 0.1);
   }
 
   .deco-circle {
@@ -201,16 +225,32 @@
     filter: blur(40px);
   }
 
+  .deco-glow-peach {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--skin-peach) / 0.2), transparent 70%);
+    pointer-events: none;
+    filter: blur(60px);
+  }
+
+  .deco-glow-pink {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, hsl(var(--skin-pink) / 0.25), transparent 70%);
+    pointer-events: none;
+    filter: blur(50px);
+  }
+
   .safety-glow-safe {
-    box-shadow: 0 0 24px hsl(var(--safe) / 0.25), 0 0 48px hsl(var(--safe) / 0.08);
+    box-shadow: 0 0 24px hsl(var(--safe) / 0.2), 0 0 48px hsl(var(--safe) / 0.06);
   }
 
   .safety-glow-caution {
-    box-shadow: 0 0 24px hsl(var(--caution) / 0.25), 0 0 48px hsl(var(--caution) / 0.08);
+    box-shadow: 0 0 24px hsl(var(--caution) / 0.2), 0 0 48px hsl(var(--caution) / 0.06);
   }
 
   .safety-glow-conflict {
-    box-shadow: 0 0 24px hsl(var(--conflict) / 0.25), 0 0 48px hsl(var(--conflict) / 0.08);
+    box-shadow: 0 0 24px hsl(var(--conflict) / 0.2), 0 0 48px hsl(var(--conflict) / 0.06);
   }
 
   .text-balance {
@@ -223,6 +263,13 @@
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+
+  .btn-press {
+    @apply transition-all duration-200;
+  }
+  .btn-press:active {
+    transform: scale(0.97);
   }
 }
 
