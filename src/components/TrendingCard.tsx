@@ -15,13 +15,13 @@ export function TrendingCard({ image, title, description, className, onClick, va
     <div
       onClick={onClick}
       className={cn(
-        "flex items-center gap-4 rounded-2xl overflow-hidden cursor-pointer hover-lift group",
+        "flex items-center gap-4 rounded-3xl overflow-hidden cursor-pointer hover-lift group shadow-md",
         variant === "blush" ? "glass-rose" : "gradient-warm",
-        "p-3",
+        "p-4",
         className
       )}
     >
-      <div className="w-20 h-20 md:w-24 md:h-24 rounded-xl overflow-hidden shrink-0">
+      <div className="w-22 h-22 md:w-26 md:h-26 rounded-2xl overflow-hidden shrink-0 shadow-md">
         <img
           src={image}
           alt={title}
@@ -29,8 +29,8 @@ export function TrendingCard({ image, title, description, className, onClick, va
         />
       </div>
       <div className="flex-1 min-w-0">
-        <h4 className="font-display font-semibold text-foreground text-sm md:text-base leading-snug">{title}</h4>
-        <p className="text-xs text-muted-foreground mt-1 line-clamp-2 leading-relaxed">{description}</p>
+        <h4 className="font-display font-semibold text-foreground text-base md:text-lg leading-snug">{title}</h4>
+        <p className="text-xs text-muted-foreground mt-1.5 line-clamp-2 leading-relaxed">{description}</p>
       </div>
       <ArrowRight size={16} className="text-muted-foreground shrink-0 group-hover:text-primary transition-colors" />
     </div>

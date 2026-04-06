@@ -5,6 +5,7 @@ import { Droplets, FlaskRound, Sparkles, Cloud, Sun, ArrowDownUp, Clock, Info } 
 import { cn } from "@/lib/utils";
 import type { SafetyStatus, RoutineStep } from "@/data/mockData";
 import { useMemo, useState } from "react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const stepIcons: Record<string, React.ElementType> = {
   droplets: Droplets,
@@ -29,6 +30,8 @@ const connectorGlow: Record<SafetyStatus, string> = {
 export default function Routine() {
   const [period, setPeriod] = useState<"am" | "pm">("am");
   const steps = period === "am" ? amRoutineSteps : pmRoutineSteps;
+  const timelineRef = useScrollReveal();
+  const guideRef = useScrollReveal();
 
   const safetyScore = useMemo(() => {
     const ids = steps.map(s => s.productId).filter(Boolean) as string[];
@@ -36,32 +39,37 @@ export default function Routine() {
   }, [steps]);
 
   return (
-    <div className="min-h-screen pb-24 md:pb-8">
+    <div className="min-h-screen pb-24 md:pb-8 relative overflow-hidden">
+      <div className="deco-glow-pink w-[250px] h-[250px] top-[60vh] right-[-80px] fixed opacity-20" />
+
       {/* Hero */}
-      <div className="relative h-[40vh] min-h-[280px] overflow-hidden md:rounded-b-3xl">
+      <div className="relative h-[42vh] min-h-[300px] overflow-hidden md:rounded-b-[2rem]">
         <img
           src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1200&h=600&fit=crop"
           alt=""
           className="w-full h-full object-cover animate-gentle-zoom"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-background/20 via-background/50 to-background" />
-        <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 md:px-10 flex items-end justify-between">
+        <div className="absolute inset-0 bg-gradient-to-b from-background/10 via-background/50 to-background" />
+        <div className="absolute bottom-0 left-0 right-0 px-6 pb-10 md:px-10 flex items-end justify-between">
           <div>
-            <h1 className="text-3xl md:text-4xl font-display font-bold text-foreground">Routine Sequencer</h1>
-            <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+            <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-medium mb-1">
+              {period === "am" ? "YOUR MORNING RITUAL" : "YOUR EVENING RITUAL"}
+            </p>
+            <h1 className="text-4xl md:text-5xl font-display font-bold text-foreground tracking-tight">Routine Sequencer</h1>
+            <p className="text-xs text-muted-foreground mt-1.5 flex items-center gap-1">
               <ArrowDownUp size={12} /> Optimized by pH & texture
             </p>
           </div>
-          <SafetyScoreRing score={safetyScore} size={80} strokeWidth={5} />
+          <SafetyScoreRing score={safetyScore} size={90} strokeWidth={5} />
         </div>
 
         {/* Floating AM/PM toggle */}
         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2 z-10">
-          <div className="glass-strong rounded-full p-1 flex gap-1 shadow-lg">
+          <div className="glass-strong rounded-full p-1.5 flex gap-1 shadow-xl">
             <button
               onClick={() => setPeriod("am")}
               className={cn(
-                "px-6 py-2 rounded-full text-xs font-semibold transition-all duration-300",
+                "px-7 py-2.5 rounded-full text-xs font-semibold transition-all duration-300 btn-press",
                 period === "am" ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -70,7 +78,7 @@ export default function Routine() {
             <button
               onClick={() => setPeriod("pm")}
               className={cn(
-                "px-6 py-2 rounded-full text-xs font-semibold transition-all duration-300",
+                "px-7 py-2.5 rounded-full text-xs font-semibold transition-all duration-300 btn-press",
                 period === "pm" ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground hover:text-foreground"
               )}
             >
@@ -80,56 +88,59 @@ export default function Routine() {
         </div>
       </div>
 
-      <div className="px-5 md:px-10 space-y-4 mt-10">
-        {/* Auto-sort button */}
+      <div className="px-5 md:px-10 space-y-6 mt-12">
+        {/* Auto-sort */}
         <div className="flex justify-end">
-          <button className="glass rounded-full px-4 py-1.5 text-[10px] font-semibold text-primary flex items-center gap-1.5 hover-lift">
+          <button className="glass-rose rounded-full px-5 py-2 text-[10px] font-semibold text-primary flex items-center gap-1.5 hover-lift btn-press shadow-md">
             <ArrowDownUp size={12} /> Auto-Sort
           </button>
         </div>
 
         {/* Timeline */}
-        <div className="relative space-y-0 md:max-w-2xl md:mx-auto">
+        <div ref={timelineRef} className="relative space-y-0 md:max-w-2xl md:mx-auto">
           {steps.map((step, index) => {
             const product = products.find((p) => p.id === step.productId);
             const Icon = stepIcons[step.icon] || Sparkles;
 
             return (
-              <div key={step.id} className="animate-slide-up" style={{ animationDelay: `${index * 0.08}s` }}>
-                {/* Connector with wait time */}
+              <div key={step.id}>
+                {/* Connector */}
                 {step.connectionSafety && (
                   <div className="flex items-center justify-center py-1 relative">
                     <div className={cn(
-                      "w-0.5 h-10 rounded-full transition-all duration-500",
+                      "w-px h-12 rounded-full transition-all duration-500",
                       connectorColors[step.connectionSafety],
                       connectorGlow[step.connectionSafety],
                       step.connectionSafety === "safe" && "animate-breathe",
                       step.connectionSafety === "conflict" && "animate-pulse-warning",
                     )} />
                     {step.waitTime && (
-                      <span className="absolute left-1/2 ml-4 glass-strong rounded-full px-2.5 py-0.5 text-[9px] font-medium text-muted-foreground flex items-center gap-1 whitespace-nowrap">
+                      <span className="absolute left-1/2 ml-4 glass-strong rounded-full px-3 py-1 text-[9px] font-medium text-muted-foreground flex items-center gap-1 whitespace-nowrap shadow-md">
                         <Clock size={9} /> {step.waitTime}
                       </span>
                     )}
                   </div>
                 )}
 
-                {/* Step Card — image-first */}
+                {/* Step Card */}
                 <div className={cn(
-                  "glass rounded-2xl overflow-hidden hover-lift group",
-                  step.connectionSafety === "conflict" && "border-conflict/25 ring-1 ring-conflict/10",
+                  "glass rounded-3xl overflow-hidden hover-lift group relative",
+                  step.connectionSafety === "conflict" && "ring-1 ring-conflict/15",
                 )}>
+                  {/* Watermark step number */}
+                  <span className="absolute top-2 right-4 text-[48px] font-display font-bold text-foreground/[0.03] leading-none select-none">
+                    {String(step.order).padStart(2, "0")}
+                  </span>
                   <div className="flex">
-                    {/* Product image */}
                     {product && (
-                      <div className="w-24 md:w-32 shrink-0 relative overflow-hidden">
+                      <div className="w-28 md:w-36 shrink-0 relative overflow-hidden">
                         <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/30" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-background/20" />
                       </div>
                     )}
-                    <div className="p-4 flex-1 flex items-center gap-3">
+                    <div className="p-5 flex-1 flex items-center gap-4">
                       <div className={cn(
-                        "w-10 h-10 rounded-xl flex items-center justify-center shrink-0",
+                        "w-11 h-11 rounded-2xl flex items-center justify-center shrink-0 shadow-md",
                         "bg-gradient-to-br from-champagne to-skin-pink"
                       )}>
                         <Icon size={18} className="text-primary" />
@@ -155,13 +166,15 @@ export default function Routine() {
           })}
         </div>
 
+        <div className="divider-elegant" />
+
         {/* Timing Guide */}
-        <div className="glass rounded-2xl p-5 space-y-3 animate-slide-up md:max-w-2xl md:mx-auto" style={{ animationDelay: "0.5s" }}>
+        <div ref={guideRef} className="glass-rose rounded-3xl p-6 space-y-4 md:max-w-2xl md:mx-auto">
           <div className="flex items-center gap-2">
             <Info size={14} className="text-primary" />
-            <h3 className="font-display font-semibold text-foreground">Timing Guide</h3>
+            <h3 className="font-display font-semibold text-foreground text-lg">Timing Guide</h3>
           </div>
-          <ul className="space-y-2 text-xs text-muted-foreground">
+          <ul className="space-y-3 text-xs text-muted-foreground">
             <li className="flex items-start gap-2"><span className="text-primary mt-0.5">•</span> Wait 1-2 minutes between active serums for full absorption</li>
             <li className="flex items-start gap-2"><span className="text-primary mt-0.5">•</span> Apply SPF as the final step, at least 15 min before sun exposure</li>
             <li className="flex items-start gap-2"><span className="text-primary mt-0.5">•</span> Thinnest → thickest consistency ensures maximum penetration</li>
