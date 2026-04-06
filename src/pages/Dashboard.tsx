@@ -8,6 +8,7 @@ import { skinTips, products, calculateSafetyScore, amRoutineSteps, pmRoutineStep
 import { ArrowRight, Sparkles, AlertTriangle, Shield, Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 function getGreeting() {
   const h = new Date().getHours();
@@ -34,6 +35,14 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const [tipIndex, setTipIndex] = useState(0);
   const hasProfile = !!localStorage.getItem("cosmetiq-profile");
+
+  const nudgeRef = useScrollReveal();
+  const catRef = useScrollReveal();
+  const statusRef = useScrollReveal();
+  const trendRef = useScrollReveal();
+  const amRef = useScrollReveal();
+  const pmRef = useScrollReveal();
+  const ctaRef = useScrollReveal();
 
   const safetyScore = useMemo(() => {
     const ids = amRoutineSteps.map(s => s.productId).filter(Boolean) as string[];
@@ -75,12 +84,13 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen pb-24 md:pb-8 relative overflow-hidden">
-      {/* Decorative bokeh */}
-      <div className="deco-circle w-[300px] h-[300px] top-[-100px] right-[-80px] fixed opacity-50" />
-      <div className="deco-circle w-[250px] h-[250px] top-[40vh] left-[-100px] fixed opacity-30" />
+      {/* Ambient gradient blobs */}
+      <div className="deco-circle w-[350px] h-[350px] top-[-120px] right-[-100px] fixed opacity-40" />
+      <div className="deco-glow-peach w-[300px] h-[300px] top-[45vh] left-[-120px] fixed opacity-25" />
+      <div className="deco-glow-pink w-[200px] h-[200px] bottom-[20vh] right-[-60px] fixed opacity-20" />
 
       {/* Split Hero */}
-      <div className="relative min-h-[55vh] md:min-h-[50vh] overflow-hidden md:rounded-b-3xl">
+      <div className="relative min-h-[58vh] md:min-h-[52vh] overflow-hidden md:rounded-b-[2rem]">
         <div className="absolute inset-0 md:left-1/2">
           <img
             src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1200&h=800&fit=crop"
@@ -90,47 +100,49 @@ export default function Dashboard() {
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/10 md:bg-gradient-to-r md:from-background md:via-background/30 md:to-transparent" />
         </div>
 
-        {/* 3D product — desktop only, overlapping right */}
+        {/* 3D product — desktop only */}
         <div className="hidden lg:block absolute right-[5%] top-1/2 -translate-y-1/2 z-10 w-[200px] h-[280px]">
           <Scene3D variant="product" className="w-full h-full" />
         </div>
 
-        <div className="relative z-10 h-full flex flex-col justify-end md:justify-center px-6 pb-10 pt-20 md:px-10 md:max-w-[50%] md:py-16">
-          <p className="text-sm text-muted-foreground font-medium tracking-wide uppercase">{getGreeting()}</p>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold text-foreground mt-1 tracking-tight">Sarah</h1>
-          <p className="text-muted-foreground text-sm md:text-base mt-2 font-light max-w-[320px] leading-relaxed">
+        <div className="relative z-10 h-full flex flex-col justify-end md:justify-center px-6 pb-12 pt-20 md:px-10 md:max-w-[50%] md:py-20">
+          <p className="text-[11px] text-muted-foreground font-medium tracking-[0.2em] uppercase">{getGreeting()}</p>
+          <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold text-foreground mt-2 tracking-tight leading-[0.95]">Sarah</h1>
+          <p className="text-muted-foreground text-sm md:text-base mt-3 font-light max-w-[320px] leading-relaxed">
             Your skin deserves molecular intelligence. Let's perfect your routine.
           </p>
-          <div className="flex gap-3 mt-5">
+          <div className="flex gap-3 mt-6">
             <button
               onClick={() => navigate("/routine")}
-              className="px-5 py-2.5 rounded-full bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 transition-opacity shadow-lg"
+              className="px-6 py-3 rounded-full bg-primary text-primary-foreground text-xs font-semibold hover:opacity-90 transition-all duration-300 shadow-lg btn-press"
             >
               Today's Routine
             </button>
             <button
               onClick={() => navigate("/compare")}
-              className="px-5 py-2.5 rounded-full glass-rose text-foreground text-xs font-semibold hover-lift"
+              className="px-6 py-3 rounded-full glass-rose text-foreground text-xs font-semibold hover-lift btn-press"
             >
               Compare Products
             </button>
           </div>
         </div>
 
-        <div className="absolute bottom-8 right-6 md:top-1/2 md:-translate-y-1/2 md:right-[25%] lg:right-[28%] animate-float z-10">
-          <div className="glass-strong rounded-3xl p-4 shadow-xl">
-            <SafetyScoreRing score={safetyScore} size={90} strokeWidth={5} />
-            <p className="text-[9px] text-muted-foreground text-center mt-1 font-medium">Safety Score</p>
+        <div className="absolute bottom-10 right-6 md:top-1/2 md:-translate-y-1/2 md:right-[25%] lg:right-[28%] animate-float z-10">
+          <div className="glass-strong rounded-3xl p-5 shadow-2xl">
+            <SafetyScoreRing score={safetyScore} size={100} strokeWidth={6} />
+            <p className="text-[9px] text-muted-foreground text-center mt-2 font-medium uppercase tracking-[0.15em]">Safety Score</p>
           </div>
         </div>
       </div>
 
-      <div className="px-5 md:px-10 space-y-7 mt-6 relative z-10">
+      <div className="px-5 md:px-10 space-y-10 md:space-y-14 mt-8 relative z-10">
         {/* Time-Aware Nudge */}
-        <TimeNudge />
+        <div ref={nudgeRef}>
+          <TimeNudge />
+        </div>
 
         {/* Category Circles */}
-        <div className="flex gap-4 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1 animate-slide-up">
+        <div ref={catRef} className="flex gap-5 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1">
           {quickCategories.map((cat) => (
             <CategoryCircle key={cat.label} image={cat.image} label={cat.label} onClick={() => navigate(cat.path)} />
           ))}
@@ -138,42 +150,44 @@ export default function Dashboard() {
 
         {/* Conflict Alert */}
         {activeConflicts.length > 0 && (
-          <div className="glass-rose rounded-2xl p-4 flex items-start gap-3 animate-slide-up border border-conflict/10">
+          <div className="glass-rose rounded-2xl p-5 flex items-start gap-3">
             <AlertTriangle size={18} className="text-conflict shrink-0 mt-0.5 animate-shake" />
             <div className="flex-1">
               <p className="text-sm font-semibold text-foreground">Conflict detected in routine</p>
               <p className="text-xs text-muted-foreground mt-0.5">{activeConflicts.slice(0, 2).join(" · ")}</p>
             </div>
-            <button onClick={() => navigate("/conflicts")} className="text-[10px] font-semibold text-primary uppercase tracking-wider shrink-0">View</button>
+            <button onClick={() => navigate("/conflicts")} className="text-[10px] font-semibold text-primary uppercase tracking-[0.15em] shrink-0 btn-press">View</button>
           </div>
         )}
 
+        <div className="divider-elegant" />
+
         {/* Skin Status + Daily Tip */}
-        <div className="flex flex-col md:flex-row gap-4 animate-slide-up" style={{ animationDelay: "0.1s" }}>
-          <div className="glass-rose rounded-2xl p-6 flex items-center justify-between flex-1 md:flex-[2] card-tilt">
-            <div className="space-y-3 flex-1">
+        <div ref={statusRef} className="flex flex-col md:flex-row gap-5">
+          <div className="glass-rose rounded-3xl p-7 flex items-center justify-between flex-1 md:flex-[2] card-tilt">
+            <div className="space-y-4 flex-1">
               <div className="flex items-center gap-2">
                 <Shield size={16} className="text-primary" />
-                <h2 className="font-display font-semibold text-lg text-foreground">Skin Status</h2>
+                <h2 className="font-display font-semibold text-xl text-foreground">Skin Status</h2>
               </div>
               <SafetyBadge status={safetyScore >= 75 ? "safe" : safetyScore >= 45 ? "caution" : "conflict"} size="lg" />
-              <p className="text-sm text-muted-foreground max-w-[240px] leading-relaxed">
+              <p className="text-sm text-muted-foreground max-w-[260px] leading-relaxed">
                 {safetyScore >= 75 ? "Your routine is well-balanced with minimal conflicts." : "Some ingredient conflicts detected in your routine."}
               </p>
             </div>
           </div>
-          <div className="gradient-blush rounded-2xl p-5 space-y-3 flex-1 card-tilt">
+          <div className="gradient-blush rounded-3xl p-6 space-y-3 flex-1 card-tilt">
             <div className="flex items-center gap-2">
               <Sparkles size={16} className="text-primary" />
-              <h3 className="font-display font-semibold text-foreground">Daily Insight</h3>
+              <h3 className="font-display font-semibold text-foreground text-lg">Daily Insight</h3>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed transition-all duration-700">{skinTips[tipIndex]}</p>
           </div>
         </div>
 
         {/* Trending */}
-        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.15s" }}>
-          <h2 className="font-display font-semibold text-lg text-foreground px-1">Trending for You</h2>
+        <div ref={trendRef} className="space-y-4">
+          <h2 className="font-display font-semibold text-xl text-foreground px-1">Trending for You</h2>
           <div className="space-y-3">
             {trendingProducts.map((item, i) => (
               <TrendingCard key={i} image={item.image} title={item.title} description={item.desc} variant={i % 2 === 0 ? "blush" : "warm"} onClick={() => navigate("/shelf")} />
@@ -181,26 +195,28 @@ export default function Dashboard() {
           </div>
         </div>
 
+        <div className="divider-elegant" />
+
         {/* AM Routine */}
-        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+        <div ref={amRef} className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2"><Sun size={16} className="text-caution" /> AM Routine</h2>
-            <button onClick={() => navigate("/routine")} className="text-xs text-primary font-medium flex items-center gap-1">Edit <ArrowRight size={12} /></button>
+            <h2 className="font-display font-semibold text-xl text-foreground flex items-center gap-2"><Sun size={16} className="text-caution" /> AM Routine</h2>
+            <button onClick={() => navigate("/routine")} className="text-xs text-primary font-medium flex items-center gap-1 btn-press">Edit <ArrowRight size={12} /></button>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-1 px-1">
             {amRoutineSteps.map((step, i) => {
               const product = products.find(p => p.id === step.productId);
               if (!product) return null;
               return (
-                <div key={step.id} className="relative shrink-0 w-36 md:w-44 group cursor-pointer" style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
-                  <div className="rounded-2xl overflow-hidden h-48 md:h-56 relative hover-lift">
+                <div key={step.id} className="relative shrink-0 w-40 md:w-48 group cursor-pointer" style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
+                  <div className="rounded-3xl overflow-hidden h-52 md:h-60 relative hover-lift shadow-lg">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                    <div className="absolute top-2 left-2"><span className="glass-rose rounded-full px-2 py-0.5 text-[9px] font-semibold">Step {step.order}</span></div>
-                    <div className="absolute top-2 right-2"><SafetyBadge status={product.safety} size="sm" showLabel={false} /></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider">{step.label}</p>
-                      <p className="text-xs font-semibold text-foreground mt-0.5 leading-snug">{product.name}</p>
+                    <div className="absolute top-3 left-3"><span className="glass-rose rounded-full px-2.5 py-1 text-[9px] font-semibold">Step {step.order}</span></div>
+                    <div className="absolute top-3 right-3"><SafetyBadge status={product.safety} size="sm" showLabel={false} /></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-[0.15em]">{step.label}</p>
+                      <p className="text-sm font-semibold text-foreground mt-0.5 leading-snug">{product.name}</p>
                     </div>
                   </div>
                 </div>
@@ -210,24 +226,24 @@ export default function Dashboard() {
         </div>
 
         {/* PM Routine */}
-        <div className="space-y-3 animate-slide-up" style={{ animationDelay: "0.25s" }}>
+        <div ref={pmRef} className="space-y-4">
           <div className="flex items-center justify-between px-1">
-            <h2 className="font-display font-semibold text-lg text-foreground flex items-center gap-2"><Moon size={16} className="text-skin-rose" /> PM Routine</h2>
-            <button onClick={() => navigate("/routine")} className="text-xs text-primary font-medium flex items-center gap-1">Edit <ArrowRight size={12} /></button>
+            <h2 className="font-display font-semibold text-xl text-foreground flex items-center gap-2"><Moon size={16} className="text-skin-rose" /> PM Routine</h2>
+            <button onClick={() => navigate("/routine")} className="text-xs text-primary font-medium flex items-center gap-1 btn-press">Edit <ArrowRight size={12} /></button>
           </div>
           <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-none -mx-1 px-1">
             {pmRoutineSteps.map((step, i) => {
               const product = products.find(p => p.id === step.productId);
               if (!product) return null;
               return (
-                <div key={step.id} className="relative shrink-0 w-36 md:w-44 group cursor-pointer" style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
-                  <div className="rounded-2xl overflow-hidden h-48 md:h-56 relative hover-lift">
+                <div key={step.id} className="relative shrink-0 w-40 md:w-48 group cursor-pointer" style={{ marginLeft: i > 0 ? "-8px" : 0 }}>
+                  <div className="rounded-3xl overflow-hidden h-52 md:h-60 relative hover-lift shadow-lg">
                     <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                     <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
-                    <div className="absolute top-2 left-2"><span className="glass-rose rounded-full px-2 py-0.5 text-[9px] font-semibold">Step {step.order}</span></div>
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-wider">{step.label}</p>
-                      <p className="text-xs font-semibold text-foreground mt-0.5 leading-snug">{product.name}</p>
+                    <div className="absolute top-3 left-3"><span className="glass-rose rounded-full px-2.5 py-1 text-[9px] font-semibold">Step {step.order}</span></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-4">
+                      <p className="text-[9px] text-muted-foreground font-medium uppercase tracking-[0.15em]">{step.label}</p>
+                      <p className="text-sm font-semibold text-foreground mt-0.5 leading-snug">{product.name}</p>
                     </div>
                   </div>
                 </div>
@@ -236,14 +252,18 @@ export default function Dashboard() {
           </div>
         </div>
 
+        <div className="divider-elegant" />
+
         {/* Shelf CTA */}
-        <button onClick={() => navigate("/shelf")} className="glass-rose rounded-2xl p-5 w-full flex items-center justify-between hover-lift group animate-slide-up" style={{ animationDelay: "0.3s" }}>
-          <div>
-            <h3 className="font-display font-semibold text-foreground text-left">Your Digital Shelf</h3>
-            <p className="text-sm text-muted-foreground">{products.length} products tracked</p>
-          </div>
-          <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors" />
-        </button>
+        <div ref={ctaRef}>
+          <button onClick={() => navigate("/shelf")} className="glass-rose rounded-3xl p-6 w-full flex items-center justify-between hover-lift group btn-press">
+            <div>
+              <h3 className="font-display font-semibold text-foreground text-left text-lg">Your Digital Shelf</h3>
+              <p className="text-sm text-muted-foreground mt-1">{products.length} products tracked</p>
+            </div>
+            <ArrowRight size={20} className="text-muted-foreground group-hover:text-primary transition-colors" />
+          </button>
+        </div>
       </div>
     </div>
   );

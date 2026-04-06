@@ -42,30 +42,32 @@ export default function Assistant() {
   };
 
   return (
-    <div className="min-h-screen pb-24 flex flex-col">
+    <div className="min-h-screen pb-24 flex flex-col relative overflow-hidden">
+      <div className="deco-glow-pink w-[200px] h-[200px] top-0 right-[-60px] fixed opacity-15" />
+
       {/* Header */}
-      <div className="relative h-28 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-skin-peach/30 to-champagne" />
-        <div className="relative px-6 pt-8 flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-clay flex items-center justify-center shadow-lg">
-            <Bot size={22} className="text-primary-foreground" />
+      <div className="relative h-32 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/8 via-skin-peach/25 to-champagne/40" />
+        <div className="relative px-6 pt-9 flex items-center gap-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-clay flex items-center justify-center shadow-xl">
+            <Bot size={24} className="text-primary-foreground" />
           </div>
           <div>
-            <h1 className="text-xl font-display font-bold text-foreground">Skin Guardian</h1>
-            <p className="text-[10px] text-muted-foreground uppercase tracking-[0.15em]">Molecular AI Assistant</p>
+            <h1 className="text-2xl font-display font-bold text-foreground">Skin Guardian</h1>
+            <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mt-0.5">Molecular AI Assistant</p>
           </div>
         </div>
       </div>
 
       <div className="px-5 space-y-4 flex-1 flex flex-col">
-        {/* Status Insight Card */}
-        <div className="glass-strong rounded-2xl p-4 flex items-center justify-between -mt-4 relative z-10 animate-slide-up">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-caution/12 flex items-center justify-center">
+        {/* Status Card */}
+        <div className="glass-strong rounded-3xl p-5 flex items-center justify-between -mt-5 relative z-10 shadow-xl">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 rounded-2xl bg-caution/12 flex items-center justify-center shadow-sm">
               <AlertTriangle size={16} className="text-caution-foreground" />
             </div>
             <div>
-              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.12em]">Active Alert</p>
+              <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-[0.15em]">Active Alert</p>
               <p className="text-sm font-semibold text-foreground mt-0.5">1 conflict in routine</p>
             </div>
           </div>
@@ -73,20 +75,22 @@ export default function Assistant() {
         </div>
 
         {/* Suggestion Pills */}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2.5">
           {suggestions.map((s) => (
             <button
               key={s}
               onClick={() => sendMessage(s)}
-              className="px-3.5 py-1.5 rounded-full text-[11px] font-medium bg-champagne text-foreground hover:bg-skin-peach transition-colors duration-300 border border-border/20"
+              className="px-4 py-2 rounded-full text-[11px] font-medium glass-rose text-foreground hover:bg-skin-peach/40 transition-all duration-300 hover:scale-105 btn-press shadow-sm"
             >
               {s}
             </button>
           ))}
         </div>
 
+        <div className="divider-elegant" />
+
         {/* Messages */}
-        <div className="flex-1 space-y-3 overflow-y-auto py-2">
+        <div className="flex-1 space-y-4 overflow-y-auto py-2">
           {messages.map((msg, i) => (
             <div
               key={msg.id}
@@ -97,10 +101,10 @@ export default function Assistant() {
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className={cn(
-                "rounded-2xl px-4 py-3 text-sm leading-relaxed",
+                "rounded-3xl px-5 py-4 text-sm leading-relaxed shadow-md",
                 msg.from === "user"
-                  ? "bg-primary text-primary-foreground rounded-br-lg"
-                  : "glass-strong rounded-bl-lg"
+                  ? "bg-primary text-primary-foreground rounded-br-xl"
+                  : "glass-strong rounded-bl-xl"
               )}>
                 {msg.text}
               </div>
@@ -109,17 +113,17 @@ export default function Assistant() {
         </div>
 
         {/* Input */}
-        <div className="sticky bottom-20 flex gap-2 pb-2">
+        <div className="sticky bottom-20 flex gap-3 pb-2">
           <Input
             placeholder="Ask about your skincare..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendMessage(input)}
-            className="rounded-2xl border-border/30 bg-card/70 backdrop-blur-sm h-12 flex-1 text-sm"
+            className="rounded-2xl border-none bg-card/70 backdrop-blur-sm h-13 flex-1 text-sm shadow-lg px-5"
           />
           <button
             onClick={() => sendMessage(input)}
-            className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-clay flex items-center justify-center text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 shrink-0"
+            className="w-13 h-13 rounded-2xl bg-gradient-to-br from-primary to-clay flex items-center justify-center text-primary-foreground shadow-xl hover:shadow-2xl transition-all duration-300 shrink-0 btn-press"
           >
             <Send size={17} />
           </button>
