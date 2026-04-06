@@ -21,12 +21,13 @@ export default function AppLayout() {
   return (
     <div className="min-h-screen bg-background flex">
       {/* Desktop Sidebar */}
-      <aside className="hidden md:flex flex-col w-60 border-r border-border/30 bg-linen/50 backdrop-blur-sm fixed inset-y-0 left-0 z-40">
-        <div className="px-6 pt-8 pb-6">
-          <h1 className="font-display text-xl font-bold text-foreground tracking-tight">CosmetiQ AI</h1>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] mt-1">Molecular Safety</p>
+      <aside className="hidden md:flex flex-col w-64 bg-linen/40 backdrop-blur-md fixed inset-y-0 left-0 z-40 shadow-xl">
+        <div className="px-7 pt-9 pb-7">
+          <h1 className="font-display text-2xl font-bold text-foreground tracking-tight">CosmetiQ AI</h1>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-[0.25em] mt-1.5">Molecular Safety</p>
         </div>
-        <nav className="flex-1 px-3 space-y-1 overflow-y-auto">
+        <div className="divider-elegant mx-4" />
+        <nav className="flex-1 px-3 space-y-1 overflow-y-auto mt-4">
           {tabs.map((tab) => {
             const isActive = location.pathname === tab.path;
             return (
@@ -34,10 +35,10 @@ export default function AppLayout() {
                 key={tab.path}
                 onClick={() => navigate(tab.path)}
                 className={cn(
-                  "w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm transition-all duration-300",
+                  "w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-sm transition-all duration-300 btn-press",
                   isActive
-                    ? "bg-primary/10 text-primary font-semibold"
-                    : "text-muted-foreground hover:text-foreground hover:bg-champagne/50"
+                    ? "bg-primary/10 text-primary font-semibold shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-champagne/40"
                 )}
               >
                 <tab.icon size={18} strokeWidth={isActive ? 2.2 : 1.5} />
@@ -46,14 +47,14 @@ export default function AppLayout() {
             );
           })}
         </nav>
-        <div className="p-4 mx-3 mb-4 rounded-2xl bg-gradient-to-br from-skin-peach/40 to-champagne/60 border border-border/20">
+        <div className="p-5 mx-4 mb-5 rounded-3xl glass-rose shadow-lg">
           <p className="text-xs font-semibold text-foreground">Skin Guardian</p>
-          <p className="text-[10px] text-muted-foreground mt-0.5">AI is monitoring your routine</p>
+          <p className="text-[10px] text-muted-foreground mt-1">AI is monitoring your routine</p>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 md:ml-60">
+      <main className="flex-1 md:ml-64">
         <div className="max-w-6xl mx-auto">
           <Outlet />
         </div>
@@ -61,7 +62,7 @@ export default function AppLayout() {
 
       {/* Mobile Bottom Tab Bar */}
       <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50">
-        <div className="mx-3 mb-3 glass-strong rounded-2xl px-1 py-2 flex justify-around items-center shadow-2xl overflow-x-auto scrollbar-none">
+        <div className="mx-3 mb-3 glass-strong rounded-3xl px-1 py-2.5 flex justify-around items-center shadow-2xl overflow-x-auto scrollbar-none">
           {tabs.map((tab) => {
             const isActive = location.pathname === tab.path;
             return (
@@ -69,7 +70,7 @@ export default function AppLayout() {
                 key={tab.path}
                 onClick={() => navigate(tab.path)}
                 className={cn(
-                  "flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-xl transition-all duration-300 shrink-0",
+                  "flex flex-col items-center gap-0.5 px-2 py-1.5 rounded-2xl transition-all duration-300 shrink-0 btn-press",
                   isActive
                     ? "text-primary bg-primary/8"
                     : "text-muted-foreground hover:text-foreground"

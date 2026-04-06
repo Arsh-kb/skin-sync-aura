@@ -66,19 +66,19 @@ export function TimeNudge() {
   return (
     <div
       className={cn(
-        "glass-rose rounded-2xl p-4 flex items-center gap-3.5 cursor-pointer hover-lift animate-slide-up",
+        "glass-rose rounded-3xl p-5 flex items-center gap-4 cursor-pointer hover-lift shadow-lg btn-press",
         `bg-gradient-to-r ${nudge.gradient}`
       )}
       onClick={() => navigate(nudge.path)}
     >
-      <div className="w-11 h-11 rounded-2xl bg-background/50 flex items-center justify-center shrink-0">
+      <div className="w-12 h-12 rounded-2xl bg-background/50 flex items-center justify-center shrink-0 shadow-md">
         <Icon size={20} className={nudge.iconClass} />
       </div>
       <div className="flex-1 min-w-0">
         <p className="text-sm font-semibold text-foreground">{nudge.title}</p>
         <p className="text-[11px] text-muted-foreground mt-0.5">{nudge.subtitle}</p>
       </div>
-      <span className="text-[10px] font-semibold text-primary uppercase tracking-wider shrink-0">
+      <span className="text-[10px] font-semibold text-primary uppercase tracking-[0.15em] shrink-0">
         {nudge.cta}
       </span>
     </div>
